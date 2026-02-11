@@ -1,28 +1,12 @@
-## 0. Prasyarat
-
-Pastikan Command Prompt dibuka dari path instalasi Kafka.
-
----
-
 ## 1. Generate Cluster ID
-
-Digunakan untuk mengidentifikasi cluster Kafka secara unik (KRaft).
 
 ```bash
 bin\windows\kafka-storage.bat random-uuid
 ```
 
-Output:
-
-```text
-[ cluster-id ]
-```
-
 ---
 
 ## 2. Format Storage (Inisialisasi Metadata)
-
-Menginisialisasi storage metadata Kafka dengan cluster ID tertentu.
 
 ```bash
 bin\windows\kafka-storage.bat format ^
@@ -38,12 +22,6 @@ bin\windows\kafka-storage.bat format ^
 bin\windows\kafka-server-start.bat config\kraft\server.properties
 ```
 
-Broker akan berjalan di:
-
-```text
-localhost:9092
-```
-
 ---
 
 ## 4. Membuat Topic
@@ -55,12 +33,6 @@ bin\windows\kafka-topics.bat ^
   --topic [ nama-topic ]
 ```
 
-**Catatan penting**:
-
-* Data di Kafka bersifat **append-only**
-* Message selalu ditambahkan ke **akhir log**
-* Tidak bisa insert ke tengah atau depan
-
 ---
 
 ## 5. Melihat Daftar Topic
@@ -71,13 +43,6 @@ bin\windows\kafka-topics.bat ^
   --list
 ```
 
-Output:
-
-```text
-[ nama-topic-1 ]
-[ nama-topic-2 ]
-```
-
 ---
 
 ## 6. Mengirim Message (Producer)
@@ -86,14 +51,6 @@ Output:
 bin\windows\kafka-console-producer.bat ^
   --bootstrap-server localhost:9092 ^
   --topic [ nama-topic ]
-```
-
-Input manual:
-
-```text
-[ isi-pesan ]
-[ isi-pesan ]
-[ isi-pesan ]
 ```
 
 ---
@@ -107,22 +64,9 @@ bin\windows\kafka-console-consumer.bat ^
   --from-beginning
 ```
 
-Output:
-
-```text
-[ isi-pesan ]
-[ isi-pesan ]
-[ isi-pesan ]
-```
-
 ---
 
 ## 8. Consumer Group
-
-Consumer group digunakan untuk:
-
-* Load balancing antar consumer
-* Manajemen offset
 
 ```bash
 bin\windows\kafka-console-consumer.bat ^
@@ -144,8 +88,85 @@ bin\windows\kafka-consumer-groups.bat ^
   --describe
 ```
 
-Informasi yang ditampilkan:
+---
 
-* Current offset
-* Log end offset
-* Lag per consumer group
+## 10. Melihat Detail Topic (Partition & Replication)
+
+```bash
+bin\windows\kafka-topics.bat ^
+  --bootstrap-server localhost:9092 ^
+  --describe ^
+  --topic [ nama-topic ]
+```
+
+---
+
+## 11. Mengirim Message dengan Key (Routing ke Partition)
+
+```bash
+bin\windows\kafka-console-producer.bat ^
+  --bootstrap-server localhost:9092 ^
+  --topic [ nama-topic ] ^
+  --property "parse.key=true" ^
+  --property "key.separator=:"
+```
+
+Format input:
+
+```text
+[key]:[value]
+```
+
+---
+
+Kafka menentukan partition dengan rumus:
+
+```text
+hash(key) % jumlah-partition
+```
+
+---
+
+## 12. Membaca Message Beserta Key dan Partition
+
+```bash
+bin\windows\kafka-console-consumer.bat ^
+  --bootstrap-server localhost:9092 ^
+  --topic [ nama-topic ] ^
+  --group [ nama-consumer-group ] ^
+  --from-beginning ^
+  --property print.key=true ^
+  --property print.partition=true
+```
+
+---
+
+## 13. Offset dan Lag per Partition
+
+```bash
+bin\windows\kafka-consumer-groups.bat ^
+  --bootstrap-server localhost:9092 ^
+  --all-groups ^
+  --all-topics ^
+  --describe
+```
+
+---
+
+## 15. Perbedaan Producer Dengan dan Tanpa Key
+
+### Tanpa Key
+
+```bash
+bin\windows\kafka-console-producer.bat ^
+  --bootstrap-server localhost:9092 ^
+  --topic [ nama-topic ]
+```
+
+---
+
+### Dengan Key
+
+```bash
+--property "parse.key=true"
+```
