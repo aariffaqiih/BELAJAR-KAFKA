@@ -55,53 +55,7 @@ bin\windows\kafka-console-producer.bat ^
 
 ---
 
-## 7. Membaca Message (Consumer)
-
-```bash
-bin\windows\kafka-console-consumer.bat ^
-  --bootstrap-server localhost:9092 ^
-  --topic [ nama-topic ] ^
-  --from-beginning
-```
-
----
-
-## 8. Consumer Group
-
-```bash
-bin\windows\kafka-console-consumer.bat ^
-  --bootstrap-server localhost:9092 ^
-  --topic [ nama-topic ] ^
-  --group [ nama-consumer-group ] ^
-  --from-beginning
-```
-
----
-
-## 9. Melihat Informasi Offset Consumer Group
-
-```bash
-bin\windows\kafka-consumer-groups.bat ^
-  --bootstrap-server localhost:9092 ^
-  --all-groups ^
-  --all-topics ^
-  --describe
-```
-
----
-
-## 10. Melihat Detail Topic (Partition & Replication)
-
-```bash
-bin\windows\kafka-topics.bat ^
-  --bootstrap-server localhost:9092 ^
-  --describe ^
-  --topic [ nama-topic ]
-```
-
----
-
-## 11. Mengirim Message dengan Key (Routing ke Partition)
+## 7. Mengirim Message dengan Key (Routing ke Partition)
 
 ```bash
 bin\windows\kafka-console-producer.bat ^
@@ -117,12 +71,56 @@ Format input:
 [key]:[value]
 ```
 
----
-
 Kafka menentukan partition dengan rumus:
 
 ```text
 hash(key) % jumlah-partition
+```
+
+---
+
+## 8. Membaca Message (Consumer)
+
+```bash
+bin\windows\kafka-console-consumer.bat ^
+  --bootstrap-server localhost:9092 ^
+  --topic [ nama-topic ] ^
+  --from-beginning
+```
+
+---
+
+## 9. Consumer Group
+
+```bash
+bin\windows\kafka-console-consumer.bat ^
+  --bootstrap-server localhost:9092 ^
+  --topic [ nama-topic ] ^
+  --group [ nama-consumer-group ] ^
+  --from-beginning
+```
+
+---
+
+## 10. Melihat Informasi Offset Consumer Group
+
+```bash
+bin\windows\kafka-consumer-groups.bat ^
+  --bootstrap-server localhost:9092 ^
+  --all-groups ^
+  --all-topics ^
+  --describe
+```
+
+---
+
+## 11. Melihat Detail Topic (Partition & Replication)
+
+```bash
+bin\windows\kafka-topics.bat ^
+  --bootstrap-server localhost:9092 ^
+  --describe ^
+  --topic [ nama-topic ]
 ```
 
 ---
@@ -149,24 +147,4 @@ bin\windows\kafka-consumer-groups.bat ^
   --all-groups ^
   --all-topics ^
   --describe
-```
-
----
-
-## 15. Perbedaan Producer Dengan dan Tanpa Key
-
-### Tanpa Key
-
-```bash
-bin\windows\kafka-console-producer.bat ^
-  --bootstrap-server localhost:9092 ^
-  --topic [ nama-topic ]
-```
-
----
-
-### Dengan Key
-
-```bash
---property "parse.key=true"
 ```
